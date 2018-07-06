@@ -9,6 +9,22 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
+
+
+def cost_function(X,Theta,y):
+    
+    #Calculating h(x)
+    z=np.dot(X,Theta)
+    hx=sigmoid(z)
+    cost= np.dot(np.transpose(-y),np.log(hx)) - np.dot((np.transpose(1 - y)), np.log(1 - hx))
+    return cost/X.shape[1]
+    
+    
+    
+    
+def sigmoid(X):
+    return 1/(1 + np.exp(- X))
+
 df=pd.read_csv("../Data/data.csv")
 
 #Dropping the 'id' column from the dataset
@@ -35,5 +51,17 @@ train_y=np.asarray(train_y)
 test_x=np.asarray(test_x)
 test_y=np.asarray(test_y)
 
+#Appending column of 1 to train_x and test_x for bias term
+train_x = np.hstack([np.ones([train_x.shape[0],1]), train_x])
+test_x = np.hstack([np.ones([test_x.shape[0],1]), test_x])
 
-Theta=np.zeros(train_x.shape[1]+1)
+#Parameter vector theta
+Theta=np.zeros(train_x.shape[1])
+
+Theta=Theta.reshape(train_x.shape[1],1)
+
+cost=cost_function(train_x,Theta,train_y)
+
+
+
+
